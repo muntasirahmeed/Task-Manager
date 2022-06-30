@@ -2,8 +2,8 @@ import React from "react";
 
 const Calender = () => {
   return (
-    <div>
-      <div className="bg-white"> this is calender</div>
+    <div className="px-3">
+      <div className="bg-white "> this is calender</div>
     </div>
   );
 };

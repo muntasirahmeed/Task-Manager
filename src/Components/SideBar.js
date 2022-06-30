@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../assests/images/Tasks-Settings-Blurb-Icon-256x256.png";
+import logo from "../assests/images/logo.png";
 import list from "../assests/images/list.png";
 import complete from "../assests/images/complete.png";
 import calender from "../assests/images/calender.png";
@@ -34,7 +34,7 @@ const SideBar = ({ children }) => {
               <div className="flex items-center gap-3 ">
                 <img src={logo} className="w-10 h-10" alt="" />
                 <Link to="/">
-                  <span className="lg:text-2xl font-bold text-emerald-500 font-ralway">
+                  <span className="lg:text-2xl font-bold text-[#0666b9] font-ralway">
                     Task Manager
                   </span>
                 </Link>
