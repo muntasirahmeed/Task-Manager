@@ -1,12 +1,21 @@
 import React, { useEffect, useState } from "react";
 import img2 from "../assests/images/img2.png";
-import { CheckIcon, PlusCircleIcon, TrashIcon } from "@heroicons/react/solid";
-import toast from "react-hot-toast";
+import {
+  CheckCircleIcon,
+  CheckIcon,
+  PencilAltIcon,
+  PlusCircleIcon,
+  TrashIcon,
+} from "@heroicons/react/solid";
+import toast, { CheckmarkIcon } from "react-hot-toast";
 import useAddedTask from "../hooks/useAddedTask";
 import Spinner from "../Components/Spinner";
+import UpdateModal from "./UpdateModal";
 const Todo = () => {
   const [allTasks, setAllTasks] = useState([]);
   const [tasks, isLoading, refetch] = useAddedTask();
+  const [modalShow, setModalShow] = useState(false);
+  const [singleTask, setSingleTask] = useState({});
   useEffect(() => {
     if (tasks) {
       const sorted = [...tasks].reverse();
@@ -43,6 +52,28 @@ const Todo = () => {
       toast.error("Please Add Some Text", { id: 3, position: "top-right" });
     }
   };
+  const deleteTask = (_id) => {
+    fetch(`http://localhost:4000/add/${_id}`, {
+      method: "DELETE",
+      headers: {
+        "content-type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.deletedCount) {
+          toast.success(`Task Deleted`);
+          refetch();
+        }
+      });
+  };
+  const updateTask = (_id) => {
+    fetch(`http://localhost:4000/updatetask/${_id}`)
+      .then((res) => res.json())
+      .then((data) => setSingleTask(data.task));
+    setModalShow(true);
+  };
+  
 
   return (
     <div className="p-10 font-ralway">
@@ -68,31 +99,43 @@ const Todo = () => {
           </div>
         </form>
       </div>
-      <div className=" mt-20 py-10 px-10 rounded-lg">
+      <div className=" mt-20 py-10 px-10 rounded-lg h-full">
         <h1 className="text-[#F0A500] text-3xl font-bold mb-10">
           Recently Added Task
         </h1>
-        <div className="space-y-3">
+        <div className="space-y-3 ">
           {allTasks.map((task, index) => (
-            <div
-              key={task._id}
-              className="flex items-center text-white w-full gap-5"
-            >
-              <p className="bg-[#082032] text-gray-100  tracking-wider text-lg py-3 capitalize px-4 rounded-lg w-full">
-                {task.task}
-              </p>
-              <div className="flex items-center gap-4">
-                <button className=" py-3 flex items-center gap-2 bg-green-600 text-white px-6 font-semibold rounded-lg ">
-                  <CheckIcon className="w-6 h-6" /> Complete
-                </button>
-                <button className=" py-3 flex items-center gap-2 bg-rose-600 text-white px-6 font-semibold rounded-lg ">
-                  <TrashIcon className="w-6 h-6" /> Delete
-                </button>
+            <div key={task._id} className="">
+              <div className="flex items-center  text-white w-full gap-5">
+                <p className="bg-[#082032] text-gray-100  tracking-wider text-lg py-3 capitalize px-4 rounded-lg w-full">
+                  {task.task}
+                </p>
+                <div className="flex items-center gap-4">
+                  <button className="hover:bg-[#082032] transition-all duration-300 ease-in-out  py-3 flex items-center gap-2 bg-[#07814a] text-white px-3  rounded-lg ">
+                    <CheckIcon className="w-6 h-6" />
+                  </button>
+                  <label
+                    for="my-modal-6"
+                    onClick={() => updateTask(task._id)}
+                    class=" modal-button hover:bg-[#082032] transition-all duration-300 ease-in-out py-3 flex items-center gap-2 bg-[#F0A500] text-white px-3 rounded-lg "
+                  >
+                    <PencilAltIcon className="w-6 h-6" />
+                  </label>
+                  <button
+                    onClick={() => deleteTask(task._id)}
+                    className=" hover:bg-[#082032] transition-all duration-300 ease-in-out py-3 flex items-center gap-2 bg-rose-600 text-white px-3 rounded-lg "
+                  >
+                    <TrashIcon className="w-6 h-6" />
+                  </button>
+                </div>
               </div>
             </div>
           ))}
         </div>
       </div>
+      {modalShow && (
+        <UpdateModal singleTask={singleTask} setModalShow={setModalShow} />
+      )}
     </div>
   );
 };
