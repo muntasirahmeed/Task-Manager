@@ -14,8 +14,8 @@ import UpdateModal from "./UpdateModal";
 const Todo = () => {
   const [allTasks, setAllTasks] = useState([]);
   const [tasks, isLoading, refetch] = useAddedTask();
-  const [modalShow, setModalShow] = useState(false);
-  const [singleTask, setSingleTask] = useState({});
+  const [modalShow, setModalShow] = useState(null);
+  const [updatingTask, setUpdatingTask] = useState({});
   const [oneTask, setOneTask] = useState({});
   useEffect(() => {
     if (tasks) {
@@ -72,7 +72,7 @@ const Todo = () => {
     setModalShow(true);
     fetch(`http://localhost:4000/updatetask/${_id}`)
       .then((res) => res.json())
-      .then((data) => setSingleTask(data.task));
+      .then((data) => setUpdatingTask(data));
   };
   const CompleteTask = (_id) => {
     fetch(`http://localhost:4000/complete/${_id}`)
@@ -162,8 +162,8 @@ const Todo = () => {
           )}
         </div>
       </div>
-      {modalShow && (
-        <UpdateModal singleTask={singleTask} setModalShow={setModalShow} />
+          {modalShow && (
+              <UpdateModal update={updatingTask} setModalShow={setModalShow} refetch={ refetch} />
       )}
     </div>
   );

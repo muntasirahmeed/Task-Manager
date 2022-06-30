@@ -1,39 +1,52 @@
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 
-const UpdateModal = ({ singleTask, setModalShow }) => {
-   const [user, setUser] = useState({ task: singleTask});
-    const handleTaskChange = event =>{
-        // console.log(event.target.value);
-        const {task, ...rest} = user;
-        const newtask = event.target.value;
-        const newUser = {task: newtask, ...rest};
-
-        setUser(newUser);
+const UpdateModal = ({ update, setModalShow, refetch }) => {
+  const [task, setTask] = useState("");
+  const updatingTask = (event) => {
+    const _id = update._id;
+    if (task) {
+      fetch(`http://localhost:4000/updated-task/${_id}`, {
+        method: "PATCH",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ task: task }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.modifiedCount) {
+            toast.success("Task Updated", { id: 23, position: "top-right" });
+            setModalShow(null)
+            refetch();
+          }
+        });
+    } else {
+      toast.error("Nothing will Changed", { id: 12, position: "top-right" });
     }
+  };
 
   return (
     <div>
-      {/* <!-- The button to open modal --> */}
-      {/* <label for="my-modal-6" class="btn modal-button">
-        open modal
-      </label> */}
-
       <input type="checkbox" id="my-modal-6" class="modal-toggle" />
       <div class="modal modal-bottom sm:modal-middle">
         <div class="modal-box bg-[#082032]">
           <textarea
-            onChange={handleTaskChange}
-            value={user.task}
-            className="textarea block w-full h-32 resize-none border-2 border-yellow-600"
+            name="updating"
+            onChange={(event) => setTask(event.target.value)}
+            className="textarea block w-full h-32 text-lg resize-none  border-2 border-yellow-600"
           ></textarea>
           <div class="mt-5 flex items-center gap-2 justify-center">
             <label
-              onClick={() => setModalShow(false)}
+              onClick={() => setModalShow(null)}
               class="hover:bg-white hover:text-black transition-all duration-300 ease-in-out py-3 flex items-center gap-2 bg-yellow-600 text-white px-7 rounded-lg "
             >
               Close
             </label>
-            <span class="hover:bg-white hover:text-black transition-all duration-300 ease-in-out py-3 flex items-center gap-2 bg-green-600 text-white px-5 rounded-lg ">
+            <span
+              onClick={updatingTask}
+              class="hover:bg-white hover:text-black transition-all duration-300 ease-in-out py-3 flex items-center gap-2 bg-green-600 text-white px-5 rounded-lg "
+            >
               Update
             </span>
           </div>
