@@ -16,6 +16,7 @@ const Todo = () => {
   const [tasks, isLoading, refetch] = useAddedTask();
   const [modalShow, setModalShow] = useState(false);
   const [singleTask, setSingleTask] = useState({});
+  const [oneTask, setOneTask] = useState({});
   useEffect(() => {
     if (tasks) {
       const sorted = [...tasks].reverse();
@@ -68,12 +69,34 @@ const Todo = () => {
       });
   };
   const updateTask = (_id) => {
+    setModalShow(true);
     fetch(`http://localhost:4000/updatetask/${_id}`)
       .then((res) => res.json())
       .then((data) => setSingleTask(data.task));
-    setModalShow(true);
   };
-  
+  const CompleteTask = (_id) => {
+    fetch(`http://localhost:4000/complete/${_id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setOneTask(data);
+        const tasks = { oneTask };
+        fetch(`http://localhost:4000/completed-task/${_id}`, {
+          method: "PUT",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(tasks),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.modifiedCount) {
+              toast.success("Task Complete", { id: 19, position: "top-right" });
+              refetch();
+            }
+          });
+      });
+    //
+  };
 
   return (
     <div className="p-10 font-ralway">
@@ -99,38 +122,44 @@ const Todo = () => {
           </div>
         </form>
       </div>
-      <div className=" mt-20 py-10 px-10 rounded-lg h-full">
+      <div className=" mt-20 py-10  rounded-lg h-full">
         <h1 className="text-[#F0A500] text-3xl font-bold mb-10">
           Recently Added Task
         </h1>
         <div className="space-y-3 ">
-          {allTasks.map((task, index) => (
-            <div key={task._id} className="">
-              <div className="flex items-center  text-white w-full gap-5">
-                <p className="bg-[#082032] text-gray-100  tracking-wider text-lg py-3 capitalize px-4 rounded-lg w-full">
-                  {task.task}
-                </p>
-                <div className="flex items-center gap-4">
-                  <button className="hover:bg-[#082032] transition-all duration-300 ease-in-out  py-3 flex items-center gap-2 bg-[#07814a] text-white px-3  rounded-lg ">
-                    <CheckIcon className="w-6 h-6" />
-                  </button>
-                  <label
-                    for="my-modal-6"
-                    onClick={() => updateTask(task._id)}
-                    class=" modal-button hover:bg-[#082032] transition-all duration-300 ease-in-out py-3 flex items-center gap-2 bg-[#F0A500] text-white px-3 rounded-lg "
-                  >
-                    <PencilAltIcon className="w-6 h-6" />
-                  </label>
-                  <button
-                    onClick={() => deleteTask(task._id)}
-                    className=" hover:bg-[#082032] transition-all duration-300 ease-in-out py-3 flex items-center gap-2 bg-rose-600 text-white px-3 rounded-lg "
-                  >
-                    <TrashIcon className="w-6 h-6" />
-                  </button>
+          {allTasks.map(
+            (task, index) =>
+              task.complete || (
+                <div key={task._id} className="">
+                  <div className="flex items-center  text-white w-full gap-5">
+                    <p className="bg-[#082032] text-gray-100  tracking-wider text-lg py-3 capitalize px-4 rounded-lg w-full">
+                      {task.task}
+                    </p>
+                    <div className="flex items-center gap-4">
+                      <button
+                        onClick={() => CompleteTask(task._id)}
+                        className="hover:bg-[#082032] transition-all duration-300 ease-in-out  py-3 flex items-center gap-2 bg-[#07814a] text-white px-3  rounded-lg "
+                      >
+                        <CheckIcon className="w-6 h-6" />
+                      </button>
+                      <label
+                        for="my-modal-6"
+                        onClick={() => updateTask(task._id)}
+                        class=" modal-button hover:bg-[#082032] transition-all duration-300 ease-in-out py-3 flex items-center gap-2 bg-[#F0A500] text-white px-3 rounded-lg "
+                      >
+                        <PencilAltIcon className="w-6 h-6" />
+                      </label>
+                      <button
+                        onClick={() => deleteTask(task._id)}
+                        className=" hover:bg-[#082032] transition-all duration-300 ease-in-out py-3 flex items-center gap-2 bg-rose-600 text-white px-3 rounded-lg "
+                      >
+                        <TrashIcon className="w-6 h-6" />
+                      </button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          ))}
+              )
+          )}
         </div>
       </div>
       {modalShow && (

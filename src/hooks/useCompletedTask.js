@@ -1,8 +1,8 @@
 import { useQuery } from "react-query";
 
 const useAddedTask = () => {
-  const { isLoading, data, refetch } = useQuery("addedTask", () =>
-    fetch("http://localhost:4000/add", {
+  const { isLoading, data, refetch } = useQuery("completedtask", () =>
+    fetch("http://localhost:4000/completed-task", {
       method: "GET",
     }).then((res) => res.json())
   );

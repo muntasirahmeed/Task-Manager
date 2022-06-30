@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 
 const UpdateModal = ({ singleTask, setModalShow }) => {
-    const [task, setTask] = useState("");
-   console.log(singleTask);
-  const handleChange = (event) => {
-      
-  };
-    
+   const [user, setUser] = useState({ task: singleTask});
+    const handleTaskChange = event =>{
+        // console.log(event.target.value);
+        const {task, ...rest} = user;
+        const newtask = event.target.value;
+        const newUser = {task: newtask, ...rest};
+
+        setUser(newUser);
+    }
+
   return (
     <div>
       {/* <!-- The button to open modal --> */}
@@ -18,8 +22,8 @@ const UpdateModal = ({ singleTask, setModalShow }) => {
       <div class="modal modal-bottom sm:modal-middle">
         <div class="modal-box bg-[#082032]">
           <textarea
-            onChange={handleChange}
-            value={task}
+            onChange={handleTaskChange}
+            value={user.task}
             className="textarea block w-full h-32 resize-none border-2 border-yellow-600"
           ></textarea>
           <div class="mt-5 flex items-center gap-2 justify-center">
