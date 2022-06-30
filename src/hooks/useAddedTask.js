@@ -1,13 +1,16 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 
 const useAddedTask = () => {
-  const [addedTask, setAddedTask] = useState([]);
-  useEffect(() => {
-    fetch("http://localhost:4000/add")
-      .then((res) => res.json())
-      .then((data) => setAddedTask(data));
-  }, []);
-  return [addedTask];
+  const { isLoading, data, refetch } = useQuery("addedTask", () =>
+    fetch("http://localhost:4000/add", {
+      method: "GET",
+      headers: {
+        authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    }).then((res) => res.json())
+  );
+
+  return [data, isLoading, refetch];
 };
 
 export default useAddedTask;
