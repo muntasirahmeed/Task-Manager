@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
-import img2 from "../assests/images/img2.png";
+
 import {
-  CheckCircleIcon,
   CheckIcon,
+  ClipboardListIcon,
   PencilAltIcon,
-  PlusCircleIcon,
   TrashIcon,
 } from "@heroicons/react/solid";
-import toast, { CheckmarkIcon } from "react-hot-toast";
+import toast from "react-hot-toast";
 import useAddedTask from "../hooks/useAddedTask";
 import Spinner from "../Components/Spinner";
 import UpdateModal from "./UpdateModal";
-const Todo = () => {
+const SmallTodo = () => {
   const [allTasks, setAllTasks] = useState([]);
   const [tasks, isLoading, refetch] = useAddedTask();
   const [modalShow, setModalShow] = useState(null);
@@ -26,33 +25,7 @@ const Todo = () => {
   if (isLoading) {
     return <Spinner />;
   }
-  const addTask = (event) => {
-    event.preventDefault();
-    const task = event.target.task.value;
-    const data = { task };
 
-    if (task) {
-      fetch("http://localhost:4000/add", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify(data),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data) {
-            toast.success("Task Added", { id: 5, position: "top-right" });
-            event.target.reset();
-            refetch();
-          } else {
-            toast.error("Failed to add", { id: 6, position: "top-right" });
-          }
-        });
-    } else {
-      toast.error("Please Add Some Text", { id: 3, position: "top-right" });
-    }
-  };
   const deleteTask = (_id) => {
     fetch(`http://localhost:4000/add/${_id}`, {
       method: "DELETE",
@@ -99,43 +72,22 @@ const Todo = () => {
   };
 
   return (
-    <div className="p-5 lg:p-10 font-ralway">
-      <div className="bg-[#05569c] pt-5 lg:pt-10 pb-8 lg:pb-16 px-5 lg:px-10 rounded-lg text-white">
-        <div className="flex flex-col lg:flex-row lg:gap-3 items-center justify-center mb-5 lg:mb-10">
-          <img src={img2} alt="" />
-          <h1 className="text-2xl lg:text-4xl font-bold "> Add Your Task</h1>
-        </div>{" "}
-        <form onSubmit={addTask}>
-          <div className="flex items-center lg:w-1/2 mx-auto gap-2 text-black">
-            <input
-              type="text"
-              className="input focus:outline-none w-full"
-              name="task"
-            />
-            <button
-              className="btn btn-md bg-[#F0A500] flex border-none items-center gap-2"
-              type="submit"
-            >
-              <PlusCircleIcon className="w-7 h-7" />
-              Add
-            </button>
-          </div>
-        </form>
-      </div>
-      <div className="mt-10 lg:mt-20 py-10  rounded-lg h-full">
-        <h1 className="text-[#F0A500] text-3xl font-bold mb-10">
-          Recently Added Task
+    <div className=" h-[500px] font-ralway">
+      <div className=" bg-[#2A2550] p-5 rounded-lg w-full h-full">
+        <h1 className="text-2xl lg:text-3xl font-bold mb-10 text-[#F0A500] flex items-center gap-3">
+          {" "}
+          <ClipboardListIcon className="w-12 h-12" /> Pending Tasks
         </h1>
-        <div className="space-y-3 ">
-          {allTasks.map(
+        <div className="space-y-3 w-full">
+          {allTasks.slice(0, 6).map(
             (task, index) =>
               task.complete || (
-                <div key={task._id} className="">
-                  <div className="flex flex-col lg:flex-row  items-center  text-white w-full gap-3 lg:gap-5">
-                    <p className="bg-[#082032] text-gray-100  tracking-wider text-lg py-3 capitalize px-4 rounded-lg w-full">
+                <div key={task._id} className="w-full">
+                  <div className="flex  lg:items-center flex-col justify-center  lg:flex-row    text-white  gap-5">
+                    <p className="bg-[#082032] text-gray-100  text-lg py-3 capitalize px-4 rounded-lg w-full">
                       {task.task}
                     </p>
-                    <div className="flex items-center gap-4">
+                    <div className="flex lg:flex-1  items-center justify-center gap-4 w-full">
                       <button
                         onClick={() => CompleteTask(task._id)}
                         className="hover:bg-[#082032] transition-all duration-300 ease-in-out  py-3 flex items-center gap-2 bg-[#07814a] text-white px-3  rounded-lg "
@@ -173,4 +125,4 @@ const Todo = () => {
   );
 };
 
-export default Todo;
+export default SmallTodo;

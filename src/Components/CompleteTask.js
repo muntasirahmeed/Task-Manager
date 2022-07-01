@@ -12,7 +12,7 @@ const CompleteTask = () => {
       const sorted = [...complete].reverse();
       setSortedData(sorted);
     }
-  }, [complete]);
+  }, [complete,refetch]);
   const deleteTask = (_id) => {
     fetch(`http://localhost:4000/add/${_id}`, {
       method: "DELETE",
@@ -32,9 +32,9 @@ const CompleteTask = () => {
     return <Spinner />;
   }
   return (
-    <div className="bg-teal-700 p-10 pb-16 px-10 font-ralway h-full">
-      <div className="bg-yellow-500  rounded-lg px-10 pt-10 pb-16 h-full">
-        <h1 className="text-3xl font-bold mb-10 flex items-center gap-3">
+    <div className="bg-teal-700 p-5 lg:p-10 pb-8 lg:pb-16 px-5 lg:px-10 font-ralway h-full">
+      <div className="bg-yellow-500  rounded-lg px-5 lg:px-10 pt-5 lg:pt-10 pb-8 lg:pb-16 h-full overflow-scroll">
+        <h1 className="text-2xl lg:text-3xl font-bold mb-10 flex items-center gap-3">
           {" "}
           <CheckCircleIcon className="w-12 h-12" /> Task Completed
         </h1>
