@@ -32,7 +32,7 @@ const Todo = () => {
     const data = { task };
 
     if (task) {
-      fetch("http://localhost:4000/add", {
+      fetch("https://quiet-sands-49746.herokuapp.com/add", {
         method: "POST",
         headers: {
           "content-type": "application/json",
@@ -54,7 +54,7 @@ const Todo = () => {
     }
   };
   const deleteTask = (_id) => {
-    fetch(`http://localhost:4000/add/${_id}`, {
+    fetch(`https://quiet-sands-49746.herokuapp.com/add/${_id}`, {
       method: "DELETE",
       headers: {
         "content-type": "application/json",
@@ -70,17 +70,17 @@ const Todo = () => {
   };
   const updateTask = (_id) => {
     setModalShow(true);
-    fetch(`http://localhost:4000/updatetask/${_id}`)
+    fetch(`https://quiet-sands-49746.herokuapp.com/updatetask/${_id}`)
       .then((res) => res.json())
       .then((data) => setUpdatingTask(data));
   };
   const CompleteTask = (_id) => {
-    fetch(`http://localhost:4000/complete/${_id}`)
+    fetch(`https://quiet-sands-49746.herokuapp.com/complete/${_id}`)
       .then((res) => res.json())
       .then((data) => {
         setOneTask(data);
         const tasks = { oneTask };
-        fetch(`http://localhost:4000/completed-task/${_id}`, {
+        fetch(`https://quiet-sands-49746.herokuapp.com/completed-task/${_id}`, {
           method: "PUT",
           headers: {
             "content-type": "application/json",

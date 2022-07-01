@@ -12,9 +12,9 @@ const CompleteTask = () => {
       const sorted = [...complete].reverse();
       setSortedData(sorted);
     }
-  }, [complete,refetch]);
+  }, [complete, refetch]);
   const deleteTask = (_id) => {
-    fetch(`http://localhost:4000/add/${_id}`, {
+    fetch(`https://quiet-sands-49746.herokuapp.com/add/${_id}`, {
       method: "DELETE",
       headers: {
         "content-type": "application/json",

@@ -6,7 +6,7 @@ const UpdateModal = ({ update, setModalShow, refetch }) => {
   const updatingTask = (event) => {
     const _id = update._id;
     if (task) {
-      fetch(`http://localhost:4000/updated-task/${_id}`, {
+      fetch(`https://quiet-sands-49746.herokuapp.com/updated-task/${_id}`, {
         method: "PATCH",
         headers: {
           "content-type": "application/json",
@@ -17,7 +17,7 @@ const UpdateModal = ({ update, setModalShow, refetch }) => {
         .then((data) => {
           if (data.modifiedCount) {
             toast.success("Task Updated", { id: 23, position: "top-right" });
-            setModalShow(null)
+            setModalShow(null);
             refetch();
           }
         });

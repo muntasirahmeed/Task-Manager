@@ -7,11 +7,9 @@ import SmallTodo from "./SmallTodo";
 import Spinner from "./Spinner";
 
 const Dashboard = () => {
-
   const [complete, isLoading, refetch] = useCompletedTask();
   const [sortedData, setSortedData] = useState([]);
 
- 
   useEffect(() => {
     if (complete) {
       const sorted = [...complete].reverse();
@@ -20,7 +18,7 @@ const Dashboard = () => {
   }, [complete]);
 
   const deleteTask = (_id) => {
-    fetch(`http://localhost:4000/add/${_id}`, {
+    fetch(`https://quiet-sands-49746.herokuapp.com/add/${_id}`, {
       method: "DELETE",
       headers: {
         "content-type": "application/json",

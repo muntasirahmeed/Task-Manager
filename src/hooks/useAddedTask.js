@@ -2,7 +2,7 @@ import { useQuery } from "react-query";
 
 const useAddedTask = () => {
   const { isLoading, data, refetch } = useQuery("addedTask", () =>
-    fetch("http://localhost:4000/add", {
+    fetch("https://quiet-sands-49746.herokuapp.com/add", {
       method: "GET",
     }).then((res) => res.json())
   );
