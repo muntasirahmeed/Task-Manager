@@ -1,10 +1,12 @@
 import { Route, Routes } from "react-router-dom";
-import Calender from "./Components/Calender";
 import CompleteTask from "./Components/CompleteTask";
 import Dashboard from "./Components/Dashboard";
 import Home from "./Components/Home";
 import Todo from "./Components/Todo";
+import Footer from "./Components/Footer";
 import  { Toaster } from "react-hot-toast";
+
+import Calender1 from "./Components/Calender";
 function App() {
   return (
     <>
@@ -13,9 +15,10 @@ function App() {
           <Route index element={<Dashboard />} />
           <Route path="todo" element={<Todo />} />
           <Route path="complete" element={<CompleteTask />} />
-          <Route path="calender" element={<Calender />} />
+          <Route path="calender" element={<Calender1 />} />
         </Route>
       </Routes>
+      <Footer/>
       <Toaster />
     </>
   );
